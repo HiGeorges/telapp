@@ -7,14 +7,14 @@
     <title>Telegram Web App Demo</title>
     <script src="https://tg.dev/js/telegram-web-app.js?1"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-
-
 </head>
 
 <body class="bg-gray-100 text-gray-800">
     <div id="app" class="max-w-lg mx-auto mt-10 p-6 bg-white shadow-md rounded">
         <h1 class="text-2xl font-bold mb-6">Welcome to Telegram Web App</h1>
-        <button id="sendMessageButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Send Message</button>
+        <div id="user-info" class="mb-6"></div>
+        <button id="sendMessageButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-6">Send Message</button>
+        <div id="result" class="mt-6"></div>
     </div>
     <script>
         // Initialiser l'application Telegram Web App
@@ -39,12 +39,12 @@
         function displayUserInfo(user) {
             const userInfoDiv = document.getElementById('user-info');
             userInfoDiv.innerHTML = `
-        <p><strong>ID:</strong> ${user.id}</p>
-        <p><strong>First Name:</strong> ${user.first_name}</p>
-        <p><strong>Last Name:</strong> ${user.last_name || 'N/A'}</p>
-        <p><strong>Username:</strong> ${user.username || 'N/A'}</p>
-        <p><strong>Language:</strong> ${user.language_code}</p>
-    `;
+                <p><strong>ID:</strong> ${user.id}</p>
+                <p><strong>First Name:</strong> ${user.first_name}</p>
+                <p><strong>Last Name:</strong> ${user.last_name || 'N/A'}</p>
+                <p><strong>Username:</strong> ${user.username || 'N/A'}</p>
+                <p><strong>Language:</strong> ${user.language_code}</p>
+            `;
         }
 
         // Fonction pour envoyer une requête à une API externe
@@ -62,8 +62,8 @@
         function displayResult(data) {
             const resultDiv = document.getElementById('result');
             resultDiv.innerHTML = `
-        <pre>${JSON.stringify(data, null, 2)}</pre>
-    `;
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
         }
 
         // Appeler la fonction fetchApiData lors du chargement de la page
