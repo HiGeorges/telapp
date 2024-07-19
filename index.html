@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Web App Demo</title>
+    <script src="https://tg.dev/js/telegram-web-app.js?1"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h1>Welcome to Telegram Web App</h1>
+        <button id="sendMessageButton">Send Message</button>
+    </div>
+    <script>
+        // Initialiser l'application Telegram Web App
+        Telegram.WebApp.ready();
+
+        // Fonction pour envoyer un message au bot
+        function sendMessage() {
+            Telegram.WebApp.sendData('Hello, World!');
+        }
+
+        // Associer l'événement au bouton
+        document.getElementById('sendMessageButton').addEventListener('click', sendMessage);
+
+        // Afficher des informations sur le WebApp
+        console.log(Telegram.WebApp.initDataUnsafe);
+    </script>
+</body>
+
+</html>
