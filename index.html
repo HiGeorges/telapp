@@ -7,14 +7,57 @@
     <title>Telegram Web App Demo</title>
     <script src="https://tg.dev/js/telegram-web-app.js?1"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 text-gray-800">
     <div id="app" class="max-w-lg mx-auto mt-10 p-6 bg-white shadow-md rounded">
-        <h1 class="text-2xl font-bold mb-6">Welc to m Web App</h1>
-        <div id="user-info" class="mb-6"></div>
-        <button id="sendMessageButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-6">Send sage</button>
-        <div id="result" class="mt-6"></div>
+        <h1 class="text-2xl font-bold mb-6">Welcome to Virtual Numbers</h1>
+
+        <!-- Section de sélection de service -->
+        <div id="service-selection" class="mb-6">
+            <h2 class="text-xl font-semibold mb-4">Select a Service</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <button class="service-button bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" data-service="WhatsApp">WhatsApp</button>
+                <button class="service-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" data-service="Facebook">Facebook</button>
+                <button class="service-button bg-blue-400 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" data-service="Twitter">Twitter</button>
+                <button class="service-button bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded" data-service="TikTok">TikTok</button>
+            </div>
+        </div>
+
+        <!-- Section de sélection de pays -->
+        <div id="country-selection" class="mb-6 hidden">
+            <h2 class="text-xl font-semibold mb-4">Select a Country</h2>
+            <select id="country-select" class="block w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                <option value="">Select a country</option>
+                <option value="USA">USA</option>
+                <option value="UK">UK</option>
+                <option value="Canada">Canada</option>
+                <option value="Australia">Australia</option>
+                <!-- Ajoutez plus de pays ici -->
+            </select>
+        </div>
+
+        <!-- Section d'affichage du numéro de téléphone et code d'activation -->
+        <div id="phone-number-section" class="mb-6 hidden">
+            <h2 class="text-xl font-semibold mb-4">Your Virtual Number</h2>
+            <div class="bg-gray-200 p-4 rounded">
+                <p id="virtual-number" class="text-lg font-bold">+1 234 567 890</p>
+            </div>
+            <div class="mt-4">
+                <label for="activation-code" class="block text-sm font-medium text-gray-700">Enter Activation Code</label>
+                <input type="text" id="activation-code" class="block w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline mt-2" placeholder="Enter code here">
+            </div>
+            <button id="verify-code-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Verify Code</button>
+        </div>
+
+        <!-- Section de résultats API -->
+        <div id="result" class="mt-6 hidden"></div>
     </div>
     <script>
         // Initialiser l'application Telegram Web App
@@ -22,7 +65,7 @@
 
         // Fonction pour envoyer un message au bot
         function sendMessage() {
-            Telegram.WebApp.sendData('Hello, ld!');
+            Telegram.WebApp.sendData('Hello, World!');
         }
 
         // Associer l'événement au bouton
@@ -68,6 +111,60 @@
 
         // Appeler la fonction fetchApiData lors du chargement de la page
         document.addEventListener('DOMContentLoaded', fetchApiData);
+
+        // Gestion de la sélection de service
+        document.querySelectorAll('.service-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const service = button.getAttribute('data-service');
+                showCountrySelection(service);
+            });
+        });
+
+        // Afficher la sélection de pays
+        function showCountrySelection(service) {
+            document.getElementById('service-selection').classList.add('hidden');
+            document.getElementById('country-selection').classList.remove('hidden');
+            document.getElementById('country-select').addEventListener('change', () => {
+                const country = document.getElementById('country-select').value;
+                if (country) {
+                    showPhoneNumberSection(service, country);
+                }
+            });
+        }
+
+        // Afficher le numéro de téléphone virtuel et le code d'activation
+        function showPhoneNumberSection(service, country) {
+            document.getElementById('country-selection').classList.add('hidden');
+            document.getElementById('phone-number-section').classList.remove('hidden');
+            // Simuler l'obtention d'un numéro virtuel
+            const virtualNumber = `+1 234 567 890`; // Remplacez par une requête à votre API si nécessaire
+            document.getElementById('virtual-number').textContent = virtualNumber;
+        }
+
+        // Gestion de la vérification du code d'activation
+        document.getElementById('verify-code-button').addEventListener('click', () => {
+            const activationCode = document.getElementById('activation-code').value;
+            verifyActivationCode(activationCode);
+        });
+
+        // Fonction pour vérifier le code d'activation
+        async function verifyActivationCode(code) {
+            try {
+                const response = await fetch('https://api.example.com/verify', { // Remplacez par l'URL de votre API
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        code
+                    })
+                });
+                const data = await response.json();
+                displayResult(data);
+            } catch (error) {
+                console.error('Error verifying activation code:', error);
+            }
+        }
     </script>
 </body>
 
